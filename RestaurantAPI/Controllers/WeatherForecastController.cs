@@ -7,13 +7,13 @@ namespace RestaurantAPI.Controllers
     public class WeatherForecastController : ControllerBase
     {
 
-        private readonly WeatherForcastService _service;
+        private readonly IWeatherForcastService _service;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherForcastService service)
         {
             _logger = logger;
-            _service = new WeatherForcastService();
+            _service = service;
         }
 
         [HttpGet]

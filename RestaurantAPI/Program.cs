@@ -1,4 +1,5 @@
 using NLog.Web;
+using RestaurantAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +10,8 @@ builder.Services.AddControllersWithViews();
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
-//authenticationSettings
-//
-//
+//configre service
+builder.Services.AddTransient<IWeatherForcastService, WeatherForcastService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -20,7 +20,8 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
-//configure (STARTAPP)
+//configure
+
 
 var scope = app.Services.CreateScope();
 //var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
