@@ -2,17 +2,13 @@
 {
     public class WeatherForcastService : IWeatherForcastService
     {
-        private static readonly string[] Summaries = new[]
+        public IEnumerable<WeatherForecast> Get(int amount, int minTemperature, int maxTemperature)
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(amount, amount).Select(index => new WeatherForecast
             {
+                ID = index,
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                TemperatureC = Random.Shared.Next(minTemperature, maxTemperature + 1),
             })
             .ToArray();
         }

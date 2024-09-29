@@ -18,30 +18,39 @@ namespace RestaurantAPI.Controllers
 
         [HttpGet]
 
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecast> Get([FromQuery]int amount, [FromQuery]int minTemperature, [FromQuery]int maxTemperature)
         {
-            var result = _service.Get();
+            var result = _service.Get(amount, minTemperature, maxTemperature);
             return result;
         }
 
         //mapowanie parametrow
-        [HttpGet("currentDay/{max}")]
-        public IEnumerable<WeatherForecast> Get2([FromQuery]int take, [FromRoute]int max)
-        {
-            var result = _service.Get();
-            return result;
-        }
+        //[HttpGet("currentDay/{max}")]
+        //public IEnumerable<WeatherForecast> Get2([FromQuery]int take, [FromRoute]int max)
+        //{
+        //    var result = _service.Get();
+        //    return "result";
+        //}
 
         //wyswietlanie zapytanie Post
         [HttpPost]
         public ActionResult<string> Hello([FromBody]string name)
         {
-            //ZAPYTAC MATEUSZA DLACZEGO NIE WYSWIETLA 401
-            //HttpContext.Response.StatusCode = 401;
+            return StatusCode(200, $"Hello {name}");
+        }
 
-            //return StatusCode(401, $"Hello {name}");
-
-            return NotFound($"Error");
+        [HttpPost("generate")]
+        public ActionResult<IEnumerable<WeatherForecast>> Generate([FromQuery] int amount, [FromBody]TemperatureRequest request)
+        {
+            if (amount > 0 && request.maxTemperature > request.minTemperature)
+            {
+                var result = _service.Get(amount, request.minTemperature, request.maxTemperature);
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest("Warunki nie spe³nione");
+            }
         }
     }
 }
