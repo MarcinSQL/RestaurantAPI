@@ -18,8 +18,4 @@
 	<PackageReference Include="NLog" Version="5.3.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
