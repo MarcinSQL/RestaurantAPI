@@ -13,6 +13,27 @@ namespace RestaurantAPI.Controllers
             _restaurantService = restaurantService;
         }
 
+        [HttpPut("{id}")]
+        public ActionResult ModifyRestaurant([FromBody] ModifyRestaurantDto dto, [FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            } else if (dto.Name == null && dto.Description == null && dto.HasDelivery == null)
+            {
+                return BadRequest("One or more fields must be filled");
+            }
+
+            var isUpdated = _restaurantService.Modify(id, dto);
+
+            if (!isUpdated)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
