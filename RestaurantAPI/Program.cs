@@ -12,7 +12,6 @@ builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
 //configre service
-builder.Services.AddTransient<IWeatherForcastService, WeatherForcastService>();
 builder.Services.AddControllers();
 //database context
 builder.Services.AddDbContext<RestaurantDbContext>();
