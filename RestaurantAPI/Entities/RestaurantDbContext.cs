@@ -13,12 +13,10 @@ namespace RestaurantAPI.Entities
         {
             //migration add => Tools>NuGet Package Manager>Package Manager Console>add-migration [name]
             //migration update => Package Manager Console>update-database
-            modelBuilder.Entity<Restaurant>().Property(r => r.Name).IsRequired().HasMaxLength(25);
+            modelBuilder.Entity<Restaurant>().Property(r => r.Name).HasMaxLength(25);
 
-            modelBuilder.Entity<Dish>().Property(d => d.Name).IsRequired();
-
-            modelBuilder.Entity<Address>().Property(a => a.City).IsRequired().HasMaxLength(50);
-            modelBuilder.Entity<Address>().Property(a => a.Street).IsRequired().HasMaxLength(50);
+            modelBuilder.Entity<Address>().Property(a => a.City).HasMaxLength(50);
+            modelBuilder.Entity<Address>().Property(a => a.Street).HasMaxLength(50);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
