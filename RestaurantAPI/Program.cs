@@ -1,6 +1,7 @@
 using NLog.Web;
 using RestaurantAPI;
 using RestaurantAPI.Entities;
+using RestaurantAPI.Middleware;
 using RestaurantAPI.Services;
 using System.Reflection;
 
@@ -23,6 +24,7 @@ builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<IRestaurantSerivce, RestaurantSerivce>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -42,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
