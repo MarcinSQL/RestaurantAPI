@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Entities;
+using RestaurantAPI.Exceptions;
 using RestaurantAPI.Models;
 
 namespace RestaurantAPI.Services
@@ -10,8 +11,8 @@ namespace RestaurantAPI.Services
         int Create(CreateRestaurantDto dto);
         IEnumerable<RestaurantDto> GetAll();
         RestaurantDto GetById(int id);
-        bool Delete(int id);
-        bool Modify(int id, ModifyRestaurantDto dto);
+        void Delete(int id);
+        void Modify(int id, ModifyRestaurantDto dto);
     }
 
     public class RestaurantSerivce : IRestaurantSerivce
@@ -26,13 +27,14 @@ namespace RestaurantAPI.Services
             _logger = logger;
         }
 
-        public bool Modify(int id, ModifyRestaurantDto dto)
+        public void Modify(int id, ModifyRestaurantDto dto)
         {
             var restaurant = _dbContext
                 .Restaurants
                 .FirstOrDefault(r => r.Id == id);
 
-            if(restaurant is null) { return false; }
+            if (restaurant is null)
+                throw new NotFoundException("Restaurant not found.");
 
             if(dto.Name != null)
             {
@@ -49,11 +51,9 @@ namespace RestaurantAPI.Services
 
             _dbContext.Restaurants.Update(restaurant);
             _dbContext.SaveChanges();
-
-            return true;
         }
 
-        public bool Delete(int id)
+        public void Delete(int id)
         {
             _logger.LogError($"Restaurant with id: {id} DELETE action invoked.");
 
@@ -61,12 +61,11 @@ namespace RestaurantAPI.Services
                 .Restaurants
                 .FirstOrDefault(r => r.Id == id);
 
-            if (restaurant is null) { return false; }
+            if (restaurant is null)
+                throw new NotFoundException("Restaurant not found.");
 
             _dbContext.Restaurants.Remove(restaurant);
             _dbContext.SaveChanges();
-
-            return true;
         }
 
         public RestaurantDto GetById(int id)
@@ -79,7 +78,7 @@ namespace RestaurantAPI.Services
 
             if (restaurant is null)
             {
-                return null;
+                throw new NotFoundException("Restaurant not found.");
             }
 
             var result = _mapper.Map<RestaurantDto>(restaurant);
