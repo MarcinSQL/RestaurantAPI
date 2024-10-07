@@ -24,6 +24,7 @@ builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<IRestaurantSerivce, RestaurantSerivce>();
+builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 
