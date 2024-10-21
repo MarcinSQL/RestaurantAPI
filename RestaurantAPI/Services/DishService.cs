@@ -12,6 +12,7 @@ namespace RestaurantAPI.Services
         DishDto GetById(int restaurantId, int dishId);
         List<DishDto> GetAll(int restaurantId);
         void RemoveAll(int restaurantId);
+        void RemoveDish(int restaurantId, int dishId);
     }
 
     public class DishService: IDishService
@@ -31,7 +32,7 @@ namespace RestaurantAPI.Services
 
             var dishEntity = _mapper.Map<Dish>(dto);
 
-            dishEntity.RestaurantId = restaurantId;
+            dishEntity.RestaurantId = restaurant.Id;
 
             _context.Dishes.Add(dishEntity);
             _context.SaveChanges();
@@ -43,11 +44,7 @@ namespace RestaurantAPI.Services
         {
             var restaurant = GetRestaurantById(restaurantId);
 
-            var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
-            if (dish is null || dish.RestaurantId != restaurantId)
-            {
-                throw new NotImplementedException("Dish not found");
-            }
+            var dish = GetDishById(restaurant.Id, dishId);
 
             var dishDto = _mapper.Map<DishDto>(dish);
 
@@ -71,6 +68,16 @@ namespace RestaurantAPI.Services
             _context.SaveChanges();
         }
 
+        public void RemoveDish(int restaurantId, int dishId)
+        {
+            var restaurant = GetRestaurantById(restaurantId);
+
+            var dish = GetDishById(restaurant.Id, dishId);
+
+            _context.Remove(dish);
+            _context.SaveChanges();
+        }
+
         private Restaurant GetRestaurantById(int restaurantId)
         {
             var restaurant = _context
@@ -81,6 +88,17 @@ namespace RestaurantAPI.Services
                 throw new NotImplementedException("Restaurant not found");
 
             return restaurant;
+        }
+
+        private Dish GetDishById(int restaurantId, int dishId)
+        {
+            var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
+            if (dish is null || dish.RestaurantId != restaurantId)
+            {
+                throw new NotImplementedException("Dish not found");
+            }
+
+            return dish;
         }
     }
 }
