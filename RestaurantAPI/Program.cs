@@ -1,8 +1,12 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using NLog.Web;
 using RestaurantAPI;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Middleware;
+using RestaurantAPI.Models;
+using RestaurantAPI.Models.Validators;
 using RestaurantAPI.Services;
 using System.Reflection;
 
@@ -16,7 +20,7 @@ builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
 //configre service
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation();
 //database context
 builder.Services.AddDbContext<RestaurantDbContext>();
 //seeding services
@@ -30,6 +34,7 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
