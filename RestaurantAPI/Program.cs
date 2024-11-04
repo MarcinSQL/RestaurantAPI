@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using NLog.Web;
 using RestaurantAPI;
 using RestaurantAPI.Entities;
@@ -27,6 +28,8 @@ builder.Services.AddScoped<IRestaurantSerivce, RestaurantSerivce>();
 builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
