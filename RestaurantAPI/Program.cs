@@ -43,6 +43,9 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality"));
+});
 //configre service
 builder.Services.AddControllers().AddFluentValidation();
 //database context
