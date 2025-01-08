@@ -50,6 +50,7 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("AtLeast20", builder => builder.AddRequirements(new MinimumAgeReguirement(20)));
 });
 builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeReguirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
 //configre service
 builder.Services.AddControllers().AddFluentValidation();
 //database context
